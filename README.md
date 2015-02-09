@@ -1,6 +1,6 @@
 #VestaCP Backup Manager
 
-With the VestaCP Backup Manager you can easily manage all your Webserver backups created by the [Vesta Server Control Panel](http://vestacp.com)
+With the VestaCP Backup Manager you can easily manage all your Webserver backups created by the <a href="http://vestacp.com" target="_blank">Vesta Server Control Panel</a>
 
 
 
@@ -18,7 +18,7 @@ To use the script you just need to set up a ssh-key on your backup machine (e.g.
 ###How to setup a ssh-key
 If you did not already set up a ssh-key to access your server, you can find many information in the internet.
 
-[This is a simple tutorial.](https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2)
+<a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2" target="_blank">This is a simple tutorial.</a>
 
 
 ###How to setup a cronjob
@@ -33,7 +33,7 @@ Just login to your (local) backup machine and open a terminal.
 
 The command above will run the script every day of the week at 03:00.
 
-[Here you can find further information.](https://help.ubuntu.com/community/CronHowto)
+<a href="https://help.ubuntu.com/community/CronHowto" target="_blank">Here you can find further information.</a>
 
 
 ##Settings
