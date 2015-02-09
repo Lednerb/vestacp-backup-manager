@@ -29,8 +29,7 @@ amount_local_backups=21
 #######################################################################
 
 
-#Actual date
-	date=`date +%F` 
+
 
 
 #function reads and count all the local files
@@ -43,10 +42,16 @@ function get_local_backups {
 	done
 }
 
+echo "============================================================"
+	let space=(60-${#backupuser}-19)/2
+	
+	for (( i = 0; i < $space; i++ )); do
+		echo -n ' '
+	done
+
+echo "Manage backups of: "$backupuser
 
 echo "============================================================"
-echo "                    Lednerb's Backups"
-echo "------------------------------------------------------------"
 echo "           +++ Avialabe backups on the Server +++"
 echo "------------------------------------------------------------"
 
@@ -121,6 +126,9 @@ echo "------------------------------------------------------------"
 
 #Delte file from server after backup_on_server_days
 
+	#Actual date
+	date=`date +%F` 
+	
 	#calculate last day, before backups will be deleted
 	delete_date=$(date -d "${backup_on_server_days} days ago" +%F)
 	
