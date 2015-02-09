@@ -7,7 +7,7 @@
 # License URL: https://github.com/Lednerb/vestacp-backup-manager/blob/master/LICENSE
 
 #######################################################################
-#							 SETTINGS								  #
+#                            SETTINGS                                 #
 #######################################################################
 #Serverdata
 server="server.host.tld"
@@ -25,7 +25,7 @@ backup_on_server_days=7
 amount_local_backups=21
 
 #######################################################################
-#	  END OF SETTINGS: You don't need to modify the lines below		  #
+#     END OF SETTINGS: You don't need to modify the lines below       #
 #######################################################################
 
 
