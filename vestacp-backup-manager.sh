@@ -46,7 +46,7 @@ function get_local_backups {
 function md5_secure_download { # expects $1 = ${files[$i]}
 	retry_number=$2
 
-	if [[ $retry_number < $max_download_retries]]; then
+	if [[ $retry_number < $max_download_retries ]]; then
 		#Download file
 		$(scp ${user}@${server}:${server_path}$1 ${local_path})
 
