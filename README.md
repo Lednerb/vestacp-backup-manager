@@ -51,3 +51,5 @@ To get the script running, you just have to edit the settings in `vestacp-backup
 `backup_on_server_days`: the amount of days the backups will remain on the server before they are deleted
 
 `amount_local_backups`: the amount of backups that will be stored on the disk. If new backups are downloaded, the oldest will be deleted, so that only this amount of backups is stored on your local disk.
+
+`max_download_retries`: the amount of maximum attempts to download a backup, if somethin gone wrong
