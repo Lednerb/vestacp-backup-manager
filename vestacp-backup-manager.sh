@@ -24,6 +24,9 @@ backup_on_server_days=7
 #Number of local backups will be saved on the disk
 amount_local_backups=21
 
+#Maximum number of retries when download was not successful
+max_download_retries=5
+
 #######################################################################
 #     END OF SETTINGS: You don't need to modify the lines below       #
 #######################################################################
@@ -41,21 +44,26 @@ function get_local_backups {
 
 #Download the file and check validity with a MD5-Hash
 function md5_secure_download { # expects $1 = ${files[$i]}
-	#Download file
-	$(scp ${user}@${server}:${server_path}$1 ${local_path})
+	retry_number=$2
 
-	#Check MD5-Hash to ensure, that the file was downloaded correctly
-	localHash=$(md5sum $local_path$i &2>1)
-	remoteHash=$(ssh ${user}@${server} md5sum $server_path$i)
+	if [[ $retry_number < $max_download_retries]]; then
+		#Download file
+		$(scp ${user}@${server}:${server_path}$1 ${local_path})
 
-	if [[ ${localHash:0:32} == ${remoteHash:0:32} ]]; then
-		echo ">>>>> MD5-Hash valid, file download was correct."
-	else
-		echo ">>>>> MD5-Hash is invalid, deleting local file..."
-		$(rm $local_path$1)
-		echo ">>>>> Local file was deleted successfully"
-		echo ">>>>> Retry download..."
-		md5_secure_download $1
+		#Check MD5-Hash to ensure, that the file was downloaded correctly
+		localHash=$(md5sum $local_path$1 &2>1)
+		remoteHash=$(ssh ${user}@${server} md5sum $server_path$1)
+
+		if [[ ${localHash:0:32} == ${remoteHash:0:32} ]]; then
+			echo ">>>>> MD5-Hash valid, file download was correct."
+		else
+			let retry_number=retry_number+1
+			echo ">>>>> MD5-Hash is invalid, deleting local file..."
+			$(rm $local_path$1)
+			echo ">>>>> Local file was deleted successfully"
+			echo ">>>>> Retry download..."
+			md5_secure_download $1 $retry_number
+		fi
 	fi
 }
 
