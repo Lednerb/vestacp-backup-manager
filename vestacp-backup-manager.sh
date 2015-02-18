@@ -31,6 +31,10 @@ max_download_retries=5
 #     END OF SETTINGS: You don't need to modify the lines below       #
 #######################################################################
 
+#function echos actual etime
+function etime {
+	echo -n $(date +"%T") ''
+}
 
 #function reads and count all the local files
 function get_local_backups {
@@ -55,30 +59,35 @@ function md5_secure_download { # expects $1 = ${files[$i]}
 		remoteHash=$(ssh ${user}@${server} md5sum $server_path$1)
 
 		if [[ ${localHash:0:32} == ${remoteHash:0:32} ]]; then
+			etime
 			echo ">>>>> MD5-Hash valid, file download was correct."
 		else
 			let retry_number=retry_number+1
+			etime
 			echo ">>>>> MD5-Hash is invalid, deleting local file..."
 			$(rm $local_path$1)
+			etime
 			echo ">>>>> Local file was deleted successfully"
+			etime
 			echo ">>>>> Retry download..."
 			md5_secure_download $1 $retry_number
 		fi
 	fi
 }
 
-echo "============================================================"
-	let space=(60-${#backupuser}-19)/2
+echo "========================================================================="
+	let space=(73-${#backupuser}-28)/2
 
 	for (( i = 0; i < $space; i++ )); do
 		echo -n ' '
 	done
 
+etime
 echo "Manage backups of: "$backupuser
 
-echo "============================================================"
-echo "           +++ Avialabe backups on the Server +++"
-echo "------------------------------------------------------------"
+echo "========================================================================="
+echo "               +++ Avialabe backups on the Server +++"
+echo "-------------------------------------------------------------------------"
 
 
 #Print filenames of all backups on the server from the chosen backup user
@@ -92,9 +101,9 @@ echo "------------------------------------------------------------"
 
 
 echo
-echo "------------------------------------------------------------"
-echo "                +++ Latest backup status +++"
-echo "------------------------------------------------------------"
+echo "-------------------------------------------------------------------------"
+echo "                      +++ Latest backup status +++"
+echo "-------------------------------------------------------------------------"
 
 #Check, if there are new backups on the server
 
@@ -120,6 +129,7 @@ echo "------------------------------------------------------------"
 			#compare if there are new backups, if yes, start download
 			if [[ $i > $latest_local_file_date ]]; then
 				#Start download from the remote server
+				etime
 				echo "> Starting download: " ${files[$counter]}
 				md5_secure_download ${files[$counter]}
 			fi
@@ -139,22 +149,24 @@ echo "------------------------------------------------------------"
 
 		for (( i = $start; i < ${#files[@]}; i++ )); do
 			#Start download from the remote server
+			etime
 			echo "> Starting download: " ${files[$i]}
 			md5_secure_download ${files[$i]}
 		done
 	fi
 
+	etime
 	echo "> Latest backup actually downloaded!"
 
 echo
-echo "------------------------------------------------------------"
-echo "                +++ Remote backup status +++"
-echo "------------------------------------------------------------"
+echo "-------------------------------------------------------------------------"
+echo "                      +++ Remote backup status +++"
+echo "-------------------------------------------------------------------------"
 
 #Delte file from server after backup_on_server_days
 
 	#Actual date
-	date=`date +%F`
+	date=$(date +%F)
 
 	#calculate last day, before backups will be deleted
 	delete_date=$(date -d "${backup_on_server_days} days ago" +%F)
@@ -172,27 +184,33 @@ echo "------------------------------------------------------------"
 
 	#if outdated files were found, delete them
 	if [[ ${#outdated_files[@]} -ne 0 ]]; then
+		etime
 		echo "> Outdated backups found on the server!"
+		etime
 		echo "> Starting to delete them..."
 
 		for i in "${outdated_files[@]}"; do
 			$(ssh ${user}@${server} rm $server_path$i)
+			etime
 			echo "> Deleted" $i
 		done
 
+		etime
 		echo "> Deleted all outdated backups."
 	else
+		etime
 		echo "> No outdated backups left on the server."
 	fi
 
 
 echo
-echo "------------------------------------------------------------"
-echo "                +++ Local backup status +++"
-echo "------------------------------------------------------------"
+echo "-------------------------------------------------------------------------"
+echo "                    +++ Local backup status +++"
+echo "-------------------------------------------------------------------------"
 
 #Check local backups, remove files if there are more than specified in amount_local_backups
 	get_local_backups
+	etime
 	echo ">" $amount_local "out of" $amount_local_backups "backups are currently saved on the disk"
 
 	#if there are more backups as it's specified, delete them
@@ -200,15 +218,18 @@ echo "------------------------------------------------------------"
 		amount_to_delete=$((amount_local - amount_local_backups))
 
 		if [[ $amount_to_delete -ne 0 ]]; then
+			etime
 			echo "> That are" $amount_to_delete "too much, start deleting files..."
 
 			#Delete the amount_to_delete oldest files from local disk
 			for (( i = 0; i < $amount_to_delete; i++ )); do
 				$(rm ${local_path}${local_files[i]})
+				etime
 				echo "> Deleted" ${local_files[i]}
 			done
 
 			get_local_backups
+			etime
 			echo ">" $amount_local "out of" $amount_local_backups "backups are currently saved on the disk"
 		fi
 	fi
