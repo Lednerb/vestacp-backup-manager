@@ -31,6 +31,15 @@ max_download_retries=5
 #     END OF SETTINGS: You don't need to modify the lines below       #
 #######################################################################
 
+platform=`uname`
+md5_gnu="md5sum"
+md5_bsd="md5 -r"
+md5=md5_gnu
+
+if [[ $platform == 'FreeBSD' ]] ; then
+	md5=md5_bsd
+fi
+
 #function echos actual etime
 function etime {
 	echo -n $(date +"%T") ''
@@ -55,7 +64,7 @@ function md5_secure_download { # expects $1 = ${files[$i]}
 		$(scp ${user}@${server}:${server_path}$1 ${local_path})
 
 		#Check MD5-Hash to ensure, that the file was downloaded correctly
-		localHash=$(md5sum $local_path$1 &2>1)
+		localHash=$(${md5} $local_path$1 &2>1)
 		remoteHash=$(ssh ${user}@${server} md5sum $server_path$1)
 
 		if [[ ${localHash:0:32} == ${remoteHash:0:32} ]]; then
@@ -169,8 +178,11 @@ echo "-------------------------------------------------------------------------"
 	date=$(date +%F)
 
 	#calculate last day, before backups will be deleted
-	delete_date=$(date -d "${backup_on_server_days} days ago" +%F)
-
+	if [[ $platform == 'FreeBSD' ]]; then
+		delete_date=$(date -v-"${backup_on_server_days}"d +%F)
+	else
+		delete_date=$(date -d "${backup_on_server_days} days ago" +%F)
+	fi
 
 	#foreach all remote files, save outdated files in array
 	outdated_files=()
