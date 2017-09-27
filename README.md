@@ -1,27 +1,27 @@
-#VestaCP Backup Manager 
+# VestaCP Backup Manager 
 
 
 With the VestaCP Backup Manager you can easily manage all your Webserver backups created by the <a href="http://vestacp.com" target="_blank">Vesta Server Control Panel</a>
 
 
 
-##Introduction
+## Introduction
 VestaCP creates by default a daily backup on the Server with all eMails, databases, webfolders and domain configurations.
 
 This Manager is based on a __bash-script__ that you can run via a cronjob.
 
 It downloads the backups from VestaCP to your local HDD and will delete older backups from the server automatically.
 
-##Getting started
+## Getting started
 In order to use this script you just need to set up a ssh-key on your backup machine (e.g. a Raspberry Pi, local pc) and configure a cronjob.
 
-###How to setup a ssh-key
+### How to setup a ssh-key
 If you did not already set up a ssh-key to access your server, you can find more information on the internet.
 
 <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2" target="_blank">This is a simple tutorial.</a>
 
 
-###How to setup a cronjob
+### How to setup a cronjob
 Just login to your (local) backup machine and open a terminal.
 
 1. Open the cronfile:
@@ -36,7 +36,7 @@ The command above will run the script every day at 3:00 am.
 <a href="https://help.ubuntu.com/community/CronHowto" target="_blank">Here you can find further information.</a>
 
 
-##Settings
+## Settings
 To get the script up and running, you just have to edit the settings in `vestacp-backup-manager.sh`:
 
 `server`: the server adress (FQDN)
