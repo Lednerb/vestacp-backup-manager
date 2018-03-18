@@ -1,4 +1,4 @@
-__This repository is DEPRICATED. Please don't use this backup script any longer.__
+__This repository is DEPRECATED. Please don't use this backup script any longer.__
 
 __The way better alternative is to use Duplycity (with duply)!__
 
