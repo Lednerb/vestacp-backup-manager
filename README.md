@@ -1,4 +1,10 @@
-# VestaCP Backup Manager 
+__This repository is DEPRICATED. Please don't use this backup script any longer.__
+
+__The way better alternative is to use Duplycity (with duply)!__
+
+----------------
+
+# VestaCP Backup Manager
 
 
 With the VestaCP Backup Manager you can easily manage all your Webserver backups created by the <a href="http://vestacp.com" target="_blank">Vesta Server Control Panel</a>
